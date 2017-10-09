@@ -211,6 +211,12 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                 'onOpen': function(storyId, callback) {
 
                     callback();
+
+                    // var sound = new Howl({
+                    //   src: ['https://tribute-video-assets.s3.amazonaws.com/music/12_full_timeless-moments_0135.mp3']
+                    // });
+
+                    // sound.play();
                 },
 
                 'onView': function(storyId) {
@@ -436,7 +442,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                     pointerItems += '<span ' + commonAttrs + ' class="' + ((currentItem === i) ? 'active' : '') + ' ' + seenClass + '"><b style="animation-duration:' + ((length === '') ? '3' : length) + 's"></b></span>';
                     htmlItems += '<div data-time="' + g(item, 'time') + '" data-type="' + g(item, 'type') + '"' + commonAttrs + ' class="item ' + seenClass +
                         ' ' + ((currentItem === i) ? 'active' : '') + '">' +
-                        ((g(item, 'type') === 'video') ? '<video class="media" muted webkit-playsinline playsinline preload="auto" src="' + g(item, 'src') + '" ' + g(item, 'type') + '></video><b class="tip muted">' + option('language', 'unmute') + '</b>' : '<img class="media" src="' + g(item, 'src') + '" ' + g(item, 'type') + '>') +
+                        ((g(item, 'type') === 'video') ? '<video class="media" webkit-playsinline playsinline crossorigin preload="auto" data-video-duration="' + length + '" src="' + g(item, 'src') + '#t=5,15" ' + g(item, 'type') + '></video><b class="tip muted">' + option('language', 'unmute') + '</b>' : '<img class="media" src="' + g(item, 'src') + '" ' + g(item, 'type') + '>') +
                         ((g(item, 'link')) ? '<a class="tip link" href="' + g(item, 'link') + '" rel="noopener" target="_blank">' + ((linkText == '') ? option('language', 'visitLink') : linkText) + '</a>' : '') +
                         '</div>';
                 });
@@ -452,6 +458,19 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                 };
 
                 if (video) {
+                    // rory
+                    // video.volume = 0.2;
+
+                    // rory
+                    // test gain node
+                    // var context = new (window.AudioContext || window.webkitAudioContext)();
+                    // var gainNode = context.createGain();
+                    // gainNode.gain.value = 10.5;   
+
+                    // var source = context.createMediaElementSource(video);
+                    // source.connect(gainNode);
+                    // gainNode.connect(context.destination);
+
                     video.onwaiting = function(e) {
                         if (video.paused) {
                             storyViewer.classList.add('paused');
@@ -468,7 +487,9 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                     };
 
                     video.onready = video.onload = video.onplaying = video.oncanplay = function() {
-                        addMuted(video);
+                        // rory
+                        // Comment this out if you want the videos to start playback with audio (i.e. unmuted)
+                        //addMuted(video);
 
                         storyViewer.classList.remove('loading');
                     };
@@ -767,6 +788,8 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                     if (!stories) {
                         modal.close();
                     } else {
+                        // rory
+                        // for debugging, comment this out and it stops at the end of one person's grouped stories
                         moveStoryItem(true);
                     }
                 };
@@ -904,9 +927,12 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                 }
 
                 var setDuration = function() {
-                    if (video.duration) {
-                        setVendorVariable(itemPointer.getElementsByTagName('b')[0].style, 'AnimationDuration', video.duration + 's');
-                    }
+                    // If the <video> element has a data-video-duration specified, use it. Otherwise, use the actual duration of the video element.
+                    // This is used for trimmed videos.
+                    var data_attr_video_duration = video.getAttribute('data-video-duration');
+                    var video_duration = ((data_attr_video_duration === '') ? video.duration : data_attr_video_duration);
+
+                    setVendorVariable(itemPointer.getElementsByTagName('b')[0].style, 'AnimationDuration', video_duration + 's');
                 };
 
                 setDuration();

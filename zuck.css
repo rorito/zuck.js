@@ -31,7 +31,9 @@
 @keyframes zuckLoading {0% {-webkit-transform: rotate(0deg);transform: rotate(0deg);}100% {-webkit-transform: rotate(360deg);transform: rotate(360deg);}}
 
 #zuck-modal{outline: 0!important;overflow:hidden;position:fixed;background:rgba(0,0,0,0.75);0;z-index:100000;font-size:14px;font-family:inherit;}
-#zuck-modal-content, #zuck-modal-content .story-viewer, #zuck-modal-content .story-viewer > .slides, #zuck-modal-content .story-viewer > .slides > *{width:100vw;height:100%; top: 0; bottom: 0;position: absolute;overflow:hidden;}
+#zuck-modal-content, #zuck-modal-content .story-viewer, #zuck-modal-content .story-viewer > .slides, #zuck-modal-content .story-viewer > .slides > * {
+	width:100vw;height:100%; top: 0; bottom: 0;position: absolute;overflow:hidden;
+}
 #zuck-modal * {user-select:none;outline: 0;}
 
 #zuck-modal.with-effects {transform: scale(0.01);transform-origin: top left;transition: 0.25s;position: absolute;top:0;left:0;width:100vw;height:100%; top: 0; bottom: 0;}
@@ -84,8 +86,32 @@
 
 #zuck-modal-content .story-viewer .slides .item{display:none;overflow:hidden;background:#000;}
 #zuck-modal-content .story-viewer .slides .item:before{z-index: 4;background: transparent;content:'';position: absolute;left:0;right:0;bottom:0;top:0;}
-#zuck-modal-content .story-viewer .slides .item > .media {height:100%;position:absolute;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);margin:auto;}
-#zuck-modal-content .story-viewer .slides .item.active, #zuck-modal-content .story-viewer .slides .item.active .tip.link {display:block;}
+#zuck-modal-content .story-viewer .slides .item > .media {
+	height:100%;
+	max-height: 100%;
+
+	/* Stretch to fullscreen, only show centered portion of video */
+	/* Doesn't work with rotations */
+	
+	/* Note: this might be better accomplished with a flexbox vertical and horizontal
+	centering. Tried object-fit but it didn't work */
+/*	position:absolute;
+	left:50%;
+	-webkit-transform:translateX(-50%);
+	transform:translateX(-50%);*/
+
+	/* Fit and contain (Works with rotations) */
+	/* note: removing width 100, max-width, max-height 100% will do a "crop and fit" to 
+	landscape videos. */
+	width: 100%;
+	max-width: 100%; 
+}
+
+#zuck-modal-content .story-viewer .slides .item.active, #zuck-modal-content .story-viewer .slides .item.active .tip.link {
+	display:block;
+	width: 100%;
+	height: 100%;
+}
 
 #zuck-modal-content .story-viewer .tip{z-index: 5; text-decoration: none;display: none;border-radius:24px;background:rgba(0,0,0,0.5);font-size:16px;position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:1000;color:#fff;text-align:center;text-transform:uppercase;font-weight:500;padding:12px 24px;}
 
